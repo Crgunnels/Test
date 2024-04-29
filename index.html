@@ -83,14 +83,14 @@
                     x: {
                         title: {
                             display: true,
-                            text: "Input Index",
+                            text: "Week",
                         },
                     },
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: "Week",
+                            text: "Weight",
                         },
                     },
                 },
@@ -109,7 +109,7 @@
 
             if (!isNaN(number) ) {
                 numbers.push(number); // Add the number to the array
-                myChart.data.labels.push(`Value ${numbers.length}`); // Add a label for the x-axis
+                myChart.data.labels.push(`Week ${numbers.length}`); // Add a label for the x-axis
                 myChart.update(); // Update the graph
 
                 // Clear the input box
