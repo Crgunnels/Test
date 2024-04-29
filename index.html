@@ -90,7 +90,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: "Value",
+                            text: "Week",
                         },
                     },
                 },
@@ -107,7 +107,7 @@
             const numberInput = document.getElementById("numberInput");
             const number = parseInt(numberInput.value);
 
-            if (!isNaN(number) && numbers.length < 7) {
+            if (!isNaN(number) ) {
                 numbers.push(number); // Add the number to the array
                 myChart.data.labels.push(`Value ${numbers.length}`); // Add a label for the x-axis
                 myChart.update(); // Update the graph
