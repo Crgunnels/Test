@@ -2,68 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ASHLEY Graph</title>
-    <!-- Include Chart.js -->
+    <title>Number Plotter with Chart.js</title>
+    <!-- Include Chart.js from a CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Add basic styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 150px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        canvas {
+            margin-top: 30px;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <h1>ASHLEY</h1>
+    <div class="container">
+        <h1>Plot Your Numbers</h1>
+        <p>Enter a number to plot on the graph (max 7 numbers):</p>
+        <input type="number" id="numberInput" placeholder="Enter a number" min="0" max="100">
+        <button onclick="addNumber()">Add Number</button>
+        
+        <!-- Chart canvas -->
+        <canvas id="myChart"></canvas>
+    </div>
 
-    <!-- Input field to enter a number -->
-    <label for="numberInput">Enter a number:</label>
-    <input type="number" id="numberInput" step="any" placeholder="Enter a number">
-    <button onclick="addNumber()">Add Number</button>
-
-    <!-- Canvas element to display the graph -->
-    <canvas id="myChart" width="400" height="200"></canvas>
-
-    <!-- JavaScript for handling input and updating the graph -->
+    <!-- JavaScript for chart and input handling -->
     <script>
-        // Initialize an empty array to store the numbers
-        var data = [];
+        // Array to hold the numbers
+        const numbers = [];
+        
+        // Initialize the chart with empty data
+        const ctx = document.getElementById("myChart").getContext("2d");
+        const myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: [], // X-axis labels
+                datasets: [
+                    {
+                        label: "Plotted Numbers",
+                        data: numbers, // The data to plot
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        borderWidth: 2,
+                        fill: true, // Whether the graph area should be filled
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Input Index",
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Value",
+                        },
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                },
+            },
+        });
 
-        // Function to add a new number to the data array and update the graph
+        // Function to add a number and update the graph
         function addNumber() {
-            // Get the input value
-            var input = document.getElementById("numberInput").value;
-            
-            // If it's a valid number, add it to the data array
-            if (input !== "" && !isNaN(input)) {
-                data.push(parseFloat(input));
-                updateGraph();
+            const numberInput = document.getElementById("numberInput");
+            const number = parseInt(numberInput.value);
+
+            if (!isNaN(number) && numbers.length < 7) {
+                numbers.push(number); // Add the number to the array
+                myChart.data.labels.push(`Value ${numbers.length}`); // Add a label for the x-axis
+                myChart.update(); // Update the graph
+
+                // Clear the input box
+                numberInput.value = "";
+            } else {
+                alert("Please enter a valid number and ensure there are no more than 7 inputs.");
             }
-        }
-
-        // Function to update the graph
-        function updateGraph() {
-            var ctx = document.getElementById("myChart").getContext("2d");
-
-            // If a chart already exists, destroy it to avoid overlapping
-            if (window.myChart) {
-                window.myChart.destroy();
-            }
-
-            // Create a new line chart with the updated data
-            window.myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array.from(Array(data.length).keys()), // Use index as labels
-                    datasets: [{
-                        label: 'Numbers',
-                        data: data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        fill: true,
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                },
-            });
         }
     </script>
 </body>
 </html>
-
